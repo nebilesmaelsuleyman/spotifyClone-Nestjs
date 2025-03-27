@@ -15,4 +15,7 @@ export class SongsService {
   findAll() {
     return this.songs;
   }
+  findOne(id: number) {
+    return this.songs[id];
+  }
 }

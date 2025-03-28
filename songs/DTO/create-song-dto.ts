@@ -4,6 +4,7 @@ import {
   IsDateString,
   IsArray,
   ArrayMinSize,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateSongDTO {
@@ -18,4 +19,9 @@ export class CreateSongDTO {
 
   @IsNotEmpty()
   readonly realeseDate: Date;
+  @IsString()
+  @IsOptional()
+  readonly lyrics: string;
+  @IsNotEmpty()
+  readonly duration: Date;
 }

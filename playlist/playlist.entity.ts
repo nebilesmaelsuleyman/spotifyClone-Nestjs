@@ -17,9 +17,9 @@ export class Playlist {
   @Column()
   name: string;
 
-  @OneToMany(() => Song, (song) => song.playList)
-  songs: Song[];
+  //   @OneToMany(() => Song, (song) => song.playList)
+  //   songs: Song[];
 
-  @ManyToOne(() => User, (user) => user.playLists)
-  user: User;
+  //   @ManyToOne(() => User, (user) => user.playLists)
+  //   user: User;
 }

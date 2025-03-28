@@ -6,31 +6,31 @@ import {
   ParseIntPipe,
   HttpStatus,
   Param,
+  HttpException,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './DTO/create-song-dto';
+import { Song } from './song-entity';
 
 @Controller('songs')
 export class SongsController {
   constructor(private readonly songsService: SongsService) {}
 
-  @Post()
-  create(@Body() createSongDTO: CreateSongDTO): void {
-    this.songsService.create(createSongDTO);
+  @Get()
+  create(@Body() createSongDTO: CreateSongDTO): Promise<Song> {
+    return this.songsService.create(createSongDTO);
   }
 
   @Get()
-  findAll() {
-    return this.songsService.findAll();
-  }
-  @Get()
-  findOne(
-    @Param(
-      'id',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    id: number,
-  ) {
-    return `fetch song based ont eh id ${typeof id}`;
+  findAll(): Promise<Song[]> {
+    try {
+      return this.songsService.findAll();
+    } catch (e) {
+      throw new HttpException(
+        'server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: e },
+      );
+    }
   }
 }

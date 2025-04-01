@@ -11,6 +11,8 @@ import { SongsModule } from './songs/songs.module';
 import { LoggerMiddleware } from './common/logger.middleware';
 import { SongsController } from './songs/songs.controller';
 import { Song } from 'src/songs/song-entity';
+import { Artist } from 'src/artists/artist-entity';
+import { User } from 'src/users/user-entity';
 import { DataSource } from 'typeorm';
 
 @Module({
@@ -23,10 +25,11 @@ import { DataSource } from 'typeorm';
       host: 'localhost',
       username: 'postgres',
       password: 'postgresspassword@123',
-      entities: [Song],
+      entities: [Song, Artist, User],
       synchronize: true,
     }),
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })

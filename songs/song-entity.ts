@@ -17,8 +17,8 @@ export class Song {
   @Column()
   title: string;
 
-  @Column('varchar', { array: true })
-  artists: string[];
+  //   @Column('varchar', { array: true })
+  //   artists: string[];
 
   @Column({ type: 'date', nullable: true })
   releasedDate: Date;
@@ -28,4 +28,8 @@ export class Song {
 
   @Column({ nullable: true })
   lyrics: string;
+
+  @ManyToMany(() => Artist, (artist) => artist.songs, { cascade: true })
+  @JoinTable({ name: 'songs_artists' })
+  artists: Artist[];
 }

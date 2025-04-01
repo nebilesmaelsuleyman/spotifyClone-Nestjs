@@ -17,15 +17,15 @@ export class Song {
   @Column()
   title: string;
 
-  // @Column('varchar', { array: true })
-  // artists: string[];
+  @Column('varchar', { array: true })
+  artists: string[];
 
-  @Column('date')
+  @Column({ type: 'date', nullable: true })
   releasedDate: Date;
 
-  @Column('time')
+  @Column({ type: 'time', nullable: true })
   duration: Date;
 
-  @Column('text')
+  @Column({ nullable: true })
   lyrics: string;
 }

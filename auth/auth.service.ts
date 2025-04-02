@@ -1,10 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/user.service';
 import { LoginDTO } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ArtistsService } from 'src/artists/artists.service';
 import * as bcrypt from 'bcryptjs';
+import { PayloadType } from './types';
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+    private artistService: ArtistsService,
+  ) {}
 
   async login(loginDto: LoginDTO) {
     const user = await this.usersService.findOne(loginDto);
@@ -14,8 +21,17 @@ export class AuthService {
       user.password,
     );
 
-    if (!passwordMatched) {
-      throw new UnauthorizedException('password doesnt exist');
+    if (passwordMatched) {
+      const payload: PayloadType = { email: user.email, userId: user.id };
+      const artist = await this.artistService.findArtist(user.id);
+      if (artist) {
+        payload.artistId = artist.id;
+      }
+      return {
+        user,
+        accessToken: this.jwtService.sign(payload),
+      };
     }
+    return user;
   }
 }

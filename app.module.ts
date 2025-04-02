@@ -15,7 +15,10 @@ import { Artist } from 'src/artists/artist-entity';
 import { User } from 'src/users/user-entity';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
+
 import { UsersModule } from './users/users.module';
+import { ArtistsModule } from './artists/artist.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -32,6 +35,7 @@ import { UsersModule } from './users/users.module';
     }),
     AuthModule,
     UsersModule,
+    ArtistsModule,
   ],
 
   controllers: [AppController],

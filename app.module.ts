@@ -14,6 +14,8 @@ import { Song } from 'src/songs/song-entity';
 import { Artist } from 'src/artists/artist-entity';
 import { User } from 'src/users/user-entity';
 import { DataSource } from 'typeorm';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { DataSource } from 'typeorm';
       entities: [Song, Artist, User],
       synchronize: true,
     }),
+    AuthModule,
+    UsersModule,
   ],
 
   controllers: [AppController],

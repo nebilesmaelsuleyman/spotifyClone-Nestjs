@@ -30,12 +30,8 @@ export class SongsService {
     song.title = songDTO.title;
     song.artists = songDTO.artists;
     song.lyrics = songDTO.lyrics;
-
-    song.releasedDate = new Date(songDTO.releasedDate);
-
-    const [hours, minutes] = songDTO.duration.split(':').map(Number);
-    song.duration = new Date(); // Create a base date (today)
-    song.duration.setHours(hours, minutes, 0, 0);
+    song.duration = songDTO.duration;
+    song.releasedDate = songDTO.releasedDate;
 
     console.log(songDTO.artists);
 

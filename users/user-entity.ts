@@ -16,6 +16,12 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column({ nullable: true, type: 'text' })
+  twoFASecret: string;
+
+  @Column({ default: false, type: 'boolean' })
+  enable2FA: boolean;
+
   @Column()
   @Exclude()
   password: string;

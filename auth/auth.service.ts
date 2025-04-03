@@ -4,7 +4,10 @@ import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ArtistsService } from 'src/artists/artists.service';
 import * as bcrypt from 'bcryptjs';
-import { PayloadType } from './types';
+import { Enable2FAType, PayloadType } from './types';
+import * as speakeasy from 'speakeasy';
+import { console } from 'node:inspector/promises';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -33,5 +36,23 @@ export class AuthService {
       };
     }
     return user;
+  }
+
+  async enable2FA(userId: number): Promise<Enable2FAType> {
+    const user = await this.usersService.findById(userId); //1
+    console.log('user form enable2FA', user);
+    if (user && user.enable2FA) {
+      //2
+      return { secret: user.twoFASecret };
+    }
+
+    const secret = speakeasy.generateSecret(); //3
+    console.log(secret);
+
+    if (user) {
+      user.twoFASecret = secret.base32; //4
+      await this.usersService.updateSecretKey(user.id, user.twoFASecret); //5
+    }
+    return { secret: user?.twoFASecret || '' }; //6
   }
 }

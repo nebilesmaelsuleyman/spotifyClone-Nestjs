@@ -27,6 +27,7 @@ import { ArtistJwtGuard } from 'src/auth/artists-jwt-guard';
 @Controller('songs')
 export class SongsController {
   constructor(private songsService: SongsService) {}
+
   @Post()
   @UseGuards(ArtistJwtGuard)
   create(
@@ -37,6 +38,7 @@ export class SongsController {
     console.log('request.user: ', request.user);
     return this.songsService.create(createSongDTO);
   }
+
   @Get()
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe)

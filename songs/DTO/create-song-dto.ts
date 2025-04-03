@@ -5,14 +5,13 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsSemVer,
   IsString,
 } from 'class-validator';
 
 export class CreateSongDTO {
   @IsString()
   @IsNotEmpty()
-  readonly title: string;
+  readonly title;
 
   @IsNotEmpty()
   @IsArray()
@@ -21,12 +20,10 @@ export class CreateSongDTO {
 
   @IsNotEmpty()
   @IsDateString()
-  @IsOptional()
   readonly releasedDate: Date;
 
-  @IsNotEmpty()
-  @IsOptional()
   @IsMilitaryTime()
+  @IsNotEmpty()
   readonly duration: Date;
 
   @IsString()

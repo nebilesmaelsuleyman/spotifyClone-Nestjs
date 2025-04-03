@@ -1,42 +1,42 @@
 import {
   Controller,
   Get,
+  Put,
+  Delete,
   Post,
-  Body,
-  ParseIntPipe,
+  HttpException,
   HttpStatus,
   Param,
-  HttpException,
-  Put,
-  Request,
+  ParseIntPipe,
+  Body,
+  Inject,
+  Scope,
   Query,
   DefaultValuePipe,
   UseGuards,
+  Request,
 } from '@nestjs/common';
-import { ArtistJwtGuard } from 'src/auth/artists-jwt-guard';
 import { SongsService } from './songs.service';
-import { CreateSongDTO } from './DTO/create-song-dto';
-import { UpdateSongDto } from './DTO/update-song-dto';
+import { CreateSongDTO } from './DTO//create-song-dto';
 import { Song } from './song-entity';
-import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
-import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import { DeleteResult, UpdateResult } from 'typeorm';
+import { UpdateSongDto } from './DTO//update-song-dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { ArtistJwtGuard } from 'src/auth/artists-jwt-guard';
 
 @Controller('songs')
 export class SongsController {
-  constructor(private readonly songsService: SongsService) {}
-
+  constructor(private songsService: SongsService) {}
+  @Post()
   @UseGuards(ArtistJwtGuard)
   create(
     @Body() createSongDTO: CreateSongDTO,
     @Request()
     request,
   ): Promise<Song> {
-    console.log(request.user);
-
+    console.log('request.user: ', request.user);
     return this.songsService.create(createSongDTO);
   }
-
   @Get()
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe)
@@ -51,24 +51,27 @@ export class SongsController {
     });
   }
 
-  @Post()
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Song> {
-    const song = await this.songsService.findOne(id);
-    if (!song) {
-      throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
-    }
-    return song;
-  }
-  @Post()
-  remove(@Param('id', new ParseIntPipe({})) id: number): Promise<DeleteResult> {
-    return this.songsService.remove(id);
+  @Get(':id')
+  findOne(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: number,
+  ): Promise<Song> {
+    return this.songsService.findOne(id);
   }
 
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateSongDto: UpdateSongDto,
+    @Body() updateSongDTO: UpdateSongDto,
   ): Promise<UpdateResult> {
-    return this.songsService.update(id, updateSongDto);
+    return this.songsService.update(id, updateSongDTO);
+  }
+
+  @Delete(':id')
+  delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+    return this.songsService.remove(id);
   }
 }

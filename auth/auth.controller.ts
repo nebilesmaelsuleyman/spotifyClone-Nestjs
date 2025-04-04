@@ -14,6 +14,8 @@ import { LoginDTO } from './dto/login.dto';
 import { AuthService } from './auth.service';
 import { Enable2FAType } from './types';
 import { JwtGuard } from './jwt-guard';
+import { ValidateTokenDTO } from './dto/validate-token';
+import { UpdateResult } from 'typeorm';
 
 @Controller('auth')
 export class AuthController {
@@ -42,5 +44,23 @@ export class AuthController {
   @UseGuards(JwtGuard)
   enable2FA(@Request() req): Promise<Enable2FAType> {
     return this.authService.enable2FA(req.user.userId);
+  }
+
+  @Post('validate-2fa')
+  @UseGuards(JwtGuard)
+  validate2FA(
+    @Request() req,
+    @Body() validateTokenDto: ValidateTokenDTO,
+  ): Promise<{ verified: boolean }> {
+    return this.authService.validate2FA(
+      req.user.userId,
+      validateTokenDto.token,
+    );
+  }
+
+  @Get('desable-2FA')
+  @UseGuards(JwtGuard)
+  disable2FA(@Request() req): Promise<UpdateResult> {
+    return this.userService.disable2FA(req.user.userId);
   }
 }

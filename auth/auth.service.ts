@@ -7,6 +7,8 @@ import * as bcrypt from 'bcryptjs';
 import { Enable2FAType, PayloadType } from './types';
 import * as speakeasy from 'speakeasy';
 import { console } from 'node:inspector/promises';
+import { Flag } from 'lucide-react';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -54,5 +56,34 @@ export class AuthService {
       await this.usersService.updateSecretKey(user.id, user.twoFASecret); //5
     }
     return { secret: user?.twoFASecret || '' }; //6
+  }
+
+  async validate2FA(
+    userId: number,
+    token: string,
+  ): Promise<{ verified: boolean }> {
+    try {
+      const user = await this.usersService.findById(userId);
+
+      const verified = speakeasy.totp.verify({
+        secret: user?.twoFASecret || '',
+        token: token,
+        encoding: 'base32',
+        window: 1,
+      });
+
+      console.log('verified..', verified);
+      if (verified) {
+        return { verified: true };
+      } else {
+        return { verified: false };
+      }
+    } catch (error) {
+      throw new UnauthorizedException('error verifying token');
+    }
+  }
+
+  async disable2FA(userId: number): Promise<UpdateResult> {
+    return this.usersService.disable2FA(userId);
   }
 }

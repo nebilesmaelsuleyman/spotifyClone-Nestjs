@@ -18,7 +18,11 @@ export class AuthService {
     private artistService: ArtistsService,
   ) {}
 
-  async login(loginDto: LoginDTO) {
+  async login(
+    loginDto: LoginDTO,
+  ): Promise<
+    { accessToken: string } | { validate2FA: string; message: string }
+  > {
     const user = await this.usersService.findOne(loginDto);
 
     const passwordMatched = await bcrypt.compare(
@@ -32,12 +36,20 @@ export class AuthService {
       if (artist) {
         payload.artistId = artist.id;
       }
+      if (user.enable2FA && user.twoFASecret) {
+        //send the validateToken request Link
+        //else otherwise sends the json web token in the response
+        return {
+          validate2FA: 'http://localhost:3000/auth/validate-2fa',
+          message:
+            'please sends the one password/token from your google Authenticator App',
+        };
+      }
       return {
-        user,
         accessToken: this.jwtService.sign(payload),
       };
     }
-    return user;
+    throw new UnauthorizedException('Invalid credentials');
   }
 
   async enable2FA(userId: number): Promise<Enable2FAType> {
@@ -85,5 +97,8 @@ export class AuthService {
 
   async disable2FA(userId: number): Promise<UpdateResult> {
     return this.usersService.disable2FA(userId);
+  }
+  async validateUserByApiKey(apiKey: string) {
+    return this.usersService.findByApiKey(apiKey);
   }
 }

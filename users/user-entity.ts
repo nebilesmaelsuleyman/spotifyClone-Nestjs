@@ -26,6 +26,9 @@ export class User {
   @Exclude()
   password: string;
 
+  @Column({ nullable: true }) // Ensure the apiKey is unique
+  apiKey: string;
+
   /**
    * A user can create many playLists
 //    */

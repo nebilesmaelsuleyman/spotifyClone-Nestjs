@@ -19,23 +19,18 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artist.module';
 import { JwtModule } from '@nestjs/jwt';
+import { dataSourceOptions } from 'db/data-source';
+import { SeedsModule } from './seeds/seeds.module';
 
 @Module({
   imports: [
     SongsModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      database: 'Spotifyclone',
-      port: 5432,
-      host: 'localhost',
-      username: 'postgres',
-      password: 'postgresspassword@123',
-      entities: [Song, Artist, User],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
     UsersModule,
     ArtistsModule,
+
+    SeedsModule,
   ],
 
   controllers: [AppController],

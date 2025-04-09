@@ -4,7 +4,7 @@ import { Song } from 'src/songs/song-entity';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/user-entity';
-import { CreatePlayListDto } from './dto/create-playlist.dto';
+import { CreatePlayListDto } from './dto/create-playlist-dto';
 
 @Injectable()
 export class PlayListsService {
@@ -26,15 +26,15 @@ export class PlayListsService {
     // songs will be the array of ids that we are getting from the DTO object
     const songs = await this.songsRepo.findByIds(playListDTO.songs);
     // set the relation for the songs with playlist entity
-    // playList.songs = songs;
+    playList.songs = songs;
 
     // A user will be the id of the user we are getting from the request
     // when we implemented the user authentication this id will become the loggedIn user id
-    // const user = await this.userRepo.findOneBy({ id: playListDTO.user });
-    // if (!user) {
-    //   throw new Error('User not found');
-    // }
-    // playList.user = user;
+    const user = await this.userRepo.findOneBy({ id: playListDTO.user });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    playList.user = user;
 
     return this.playListRepo.save(playList);
   }

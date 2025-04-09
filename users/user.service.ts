@@ -59,6 +59,7 @@ export class UsersService {
       { enable2FA: false, twoFASecret: '' },
     );
   }
+
   async findByApiKey(apiKey: string): Promise<User> {
     const user = await this.userRepository.findOneBy({ apiKey });
     if (!user) {
@@ -66,6 +67,7 @@ export class UsersService {
         'User not found with the provided API key',
       );
     }
+
     return user;
   }
 }

@@ -1,15 +1,14 @@
 import { Song } from 'src/songs/song-entity';
 import { User } from 'src/users/user-entity';
-
 import {
   Column,
   Entity,
-  PrimaryGeneratedColumn,
-  OneToMany,
   ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('playlist')
+@Entity('playlists')
 export class Playlist {
   @PrimaryGeneratedColumn()
   id: number;
@@ -17,9 +16,16 @@ export class Playlist {
   @Column()
   name: string;
 
-  //   @OneToMany(() => Song, (song) => song.playList)
-  //   songs: Song[];
+  /**
+   * Each Playlist will have multiple songs
+   */
+  @OneToMany(() => Song, (song) => song.playList)
+  songs: Song[];
 
-  //   @ManyToOne(() => User, (user) => user.playLists)
-  //   user: User;
+  /**
+   * Many Playlist can belong to a single unique user
+   */
+
+  @ManyToOne(() => User, (user) => user.playLists)
+  user: User;
 }

@@ -1,5 +1,5 @@
 import { Artist } from 'src/artists/artist-entity';
-// import { Playlist } from 'src/playlists/playlist.entity';
+import { Playlist } from 'src/playlist/playlist.entity';
 import {
   Column,
   Entity,
@@ -36,6 +36,6 @@ export class Song {
   /**
    * Many songs can belong to playlist for each unique user
    */
-  //   @ManyToOne(() => Playlist, (playList) => playList.songs)
-  //   playList: Playlist;
+  @ManyToOne(() => Playlist, (playList) => playList.songs)
+  playList: Playlist;
 }

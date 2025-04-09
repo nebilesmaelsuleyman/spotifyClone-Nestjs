@@ -29,9 +29,14 @@ export class User {
   @Column({ nullable: true }) // Ensure the apiKey is unique
   apiKey: string;
 
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({ nullable: true })
+  address: string;
   /**
    * A user can create many playLists
 //    */
-  //   @OneToMany(() => Playlist, (playList) => playList.user)
+  @OneToMany(() => Playlist, (playList) => playList.user)
   playLists: Playlist[];
 }

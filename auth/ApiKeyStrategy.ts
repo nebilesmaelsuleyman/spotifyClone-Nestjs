@@ -15,7 +15,6 @@ export class ApiKeyStrategy extends PassportStrategy(Strategy, 'bearer') {
     if (!user) {
       throw new UnauthorizedException();
     } else {
-      return user;
     }
   }
 }

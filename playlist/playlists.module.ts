@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { PlayListsController } from './playlist.controller';
+import { PlayListsController } from './playlists.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Playlist } from './playlist.entity';
-import { PlayListsService } from './playlist.service';
+import { PlayListsService } from './playlists.service';
 import { Song } from 'src/songs/song-entity';
 import { User } from 'src/users/user-entity';
 

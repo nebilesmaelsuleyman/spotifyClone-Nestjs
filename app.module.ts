@@ -8,17 +8,18 @@ import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SongsModule } from './songs/songs.module';
-import { LoggerMiddleware } from './common/logger.middleware';
+import {} from './src/songs/song-entity';
+import { LoggerMiddleware } from 'src/common/logger.middleware';
 import { DataSource } from 'typeorm';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './src/auth/auth.module';
 
-import { UsersModule } from './users/users.module';
-import { ArtistsModule } from './artists/artist.module';
+import { UsersModule } from './src/users/users.module';
+import { ArtistsModule } from './src/artists/artist.module';
 import { JwtModule } from '@nestjs/jwt';
 import { dataSourceOptions, typeOrmAsyncConfig } from 'db/data-source';
-import { SeedsModule } from './seeds/seeds.module';
-import configuration from './config/configuration';
+import { SeedsModule } from './src/seeds/seeds.module';
+import configuration from 'src/config/configuration';
+import { SongsModule } from 'src/songs/songs.module';
 
 @Module({
   imports: [
